@@ -27,5 +27,5 @@
   <source path='shared'/>
 
   <!-- allow Super Dev Mode -->
-  <add-linker name="xsiframe"/>
+  <!--<add-linker name="xsiframe"/>-->
 </module>
