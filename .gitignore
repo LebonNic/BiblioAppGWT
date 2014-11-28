@@ -41,3 +41,13 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Datastore files
+local_db.bin
+datastore-indexes-auto.xml
+
+#GWT Generated files
+eclipse_project/BiblioAppGWT/war/biblioappgwt
+eclipse_project/gwt-unitCache
+eclipse_project/BiblioAppGWT/gwt-unitCache
+eclipse_project/BiblioAppGWT/war/WEB-INF/deploy/biblioappgwt/symbolMaps
