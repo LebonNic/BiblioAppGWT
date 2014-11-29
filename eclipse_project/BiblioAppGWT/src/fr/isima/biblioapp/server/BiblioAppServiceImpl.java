@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.ObjectifyService;
 
 import fr.isima.biblioapp.client.service.BiblioAppService;
 import fr.isima.biblioapp.shared.persistence.Livre;
@@ -15,6 +16,22 @@ import fr.isima.biblioapp.shared.persistence.Auteur;
 @SuppressWarnings("serial")
 public class BiblioAppServiceImpl extends RemoteServiceServlet implements
 		BiblioAppService {
+	
+	static{
+		ObjectifyService.register(Auteur.class);
+		ObjectifyService.register(Livre.class);
+	}
+	
+	public BiblioAppServiceImpl(){
+		/*List<Auteur> auteurs = new ArrayList<>();
+		auteurs.add(new Auteur("Denisot", "Michel", "Paris"));
+		auteurs.add(new Auteur("Hugo", "Victor", "Paris"));
+		auteurs.add(new Auteur("Zola", "Emile", "Paris"));
+		
+		for(Auteur a : auteurs){
+			ofy().save().entity(a).now();
+		}*/
+	}
 	
 	private static ArrayList<Auteur> toAuteurArrayList(List<Auteur> list){
 		ArrayList<Auteur> ret = new ArrayList<>();
