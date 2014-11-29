@@ -151,6 +151,16 @@ public class BiblioAppServiceImpl extends RemoteServiceServlet implements
 		
 		return deleted;
 	}
+	
+	@Override
+	public ArrayList<Auteur> deleteAuteurs(List<Long> numeros_a) {
+		
+		for(Long numero_a : numeros_a){
+			this.deleteAuteur(numero_a); 
+		}
+		
+		return getAllAuteurs();
+	}
 
 	/**
 	 * Ajoute un livre dans la base de données.

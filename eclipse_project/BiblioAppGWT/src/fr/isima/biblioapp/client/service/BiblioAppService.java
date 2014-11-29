@@ -1,6 +1,7 @@
 package fr.isima.biblioapp.client.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -16,6 +17,7 @@ public interface BiblioAppService extends RemoteService{
 	ArrayList<Auteur> searchAuteurs(String nom);
 	Boolean updateAuteur(Long numero_a, String nom, String prenom, String adresse);
 	Boolean deleteAuteur(Long numero_a);
+	ArrayList<Auteur> deleteAuteurs(List<Long> numeros_a);
 	
 	Livre addLivre(String titre, double prix, String resume, Long numero_a);
 	Livre getLivre(Long numero_l);

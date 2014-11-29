@@ -1,2 +1,2 @@
 serviceClass: fr.isima.biblioapp.client.service.BiblioAppService
-path: E4ACD7740FB2146B6E797F8565325CBB.gwt.rpc
+path: DC793729E50B03FB010470ABC884AA9B.gwt.rpc

@@ -1,5 +1,7 @@
 package fr.isima.biblioapp.client.presenter;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
@@ -8,6 +10,9 @@ import com.google.gwt.user.client.ui.HasValue;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
+import fr.isima.biblioapp.client.event.AuteurAddedEvent;
+import fr.isima.biblioapp.client.event.AuteurUpdatedEvent;
+import fr.isima.biblioapp.client.event.EditAuteurCancelledEvent;
 import fr.isima.biblioapp.client.service.BiblioAppServiceAsync;
 import fr.isima.biblioapp.shared.persistence.Auteur;
 
@@ -66,7 +71,22 @@ public class EditAuteurPresenter implements Presenter {
 	}
 
 	private void bind() {
-		// TODO Auto-generated method stub
+		display.getSaveButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				doSave();
+			}
+		});
+		
+		display.getCancelButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				eventBus.fireEvent(new EditAuteurCancelledEvent());
+				
+			}
+		});
 		
 	}
 	
@@ -90,7 +110,7 @@ public class EditAuteurPresenter implements Presenter {
 
 												@Override
 												public void onSuccess( Boolean result) {
-													// TODO Auto-generated method stub
+													eventBus.fireEvent(new AuteurUpdatedEvent());
 													
 												}
 			});
@@ -110,7 +130,7 @@ public class EditAuteurPresenter implements Presenter {
 
 											@Override
 											public void onSuccess(Auteur result) {
-												// TODO Auto-generated method stub
+												eventBus.fireEvent(new AuteurAddedEvent());
 												
 											}
 			});

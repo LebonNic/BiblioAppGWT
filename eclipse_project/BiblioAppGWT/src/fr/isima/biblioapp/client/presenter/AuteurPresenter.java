@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
 import fr.isima.biblioapp.client.event.AddAuteurEvent;
+import fr.isima.biblioapp.client.event.UpdateAuteurEvent;
 import fr.isima.biblioapp.client.service.BiblioAppServiceAsync;
 import fr.isima.biblioapp.shared.persistence.Auteur;
 
@@ -47,7 +48,6 @@ public class AuteurPresenter implements Presenter {
 	    fetchAuteursList();
 	}
 
-
 	private void fetchAuteursList() {
 		rpcService.getAllAuteurs(new AsyncCallback<ArrayList<Auteur>>() {
 			
@@ -66,7 +66,37 @@ public class AuteurPresenter implements Presenter {
 			@Override
 			public void onFailure(Throwable caught) {
 				Window.alert("Error fetching auteurs list");
+			}
+		});
+		
+	}
+	
+	private void deleteSelectedAuteurs(){
+		List<Integer> selectedRows = display.getSelectedRows();
+	    ArrayList<Long> numeros_a = new ArrayList<Long>();
+	    
+	    for(Integer i : selectedRows){
+	    	numeros_a.add(listAuteurs.get(i).getNumero_a());
+	    }
+	    
+	    rpcService.deleteAuteurs(numeros_a, new AsyncCallback<ArrayList<Auteur>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Error deleting selected contacts");
+			}
+
+			@Override
+			public void onSuccess(ArrayList<Auteur> result) {
+				listAuteurs = result;
 				
+				List<String> data = new ArrayList<>();
+				
+				for(Auteur a : listAuteurs){
+					data.add(a.getNom());
+				}
+				
+				display.setData(data);
 			}
 		});
 		
@@ -78,6 +108,28 @@ public class AuteurPresenter implements Presenter {
 			@Override
 			public void onClick(ClickEvent event) {
 				eventBus.fireEvent(new AddAuteurEvent());
+			}
+		});
+		
+		display.getDeleteButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				deleteSelectedAuteurs();
+			}
+		});
+		
+		display.getList().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				int selectedRow = display.getClickedRow(event);
+		        
+		        if (selectedRow >= 0) {
+		        	Long numero_a = listAuteurs.get(selectedRow).getNumero_a();
+		        	eventBus.fireEvent(new UpdateAuteurEvent(numero_a));
+		        }
+				
 			}
 		});
 		

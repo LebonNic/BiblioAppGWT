@@ -1,6 +1,7 @@
 package fr.isima.biblioapp.client.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -14,6 +15,7 @@ public interface BiblioAppServiceAsync {
 	void searchAuteurs(String nom, AsyncCallback<ArrayList<Auteur>> callback);
 	void updateAuteur(Long numero_a, String nom, String prenom, String adresse, AsyncCallback<Boolean> callback);
 	void deleteAuteur(Long numero_a, AsyncCallback<Boolean> callback);
+	void deleteAuteurs(List<Long> numeros_a, AsyncCallback<ArrayList<Auteur>> callback);
 	
 	void addLivre(String titre, double prix, String resume, Long numero_a, AsyncCallback<Livre> callback);
 	void getLivre(Long numero_l, AsyncCallback<Livre> callback);
