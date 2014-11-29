@@ -54,12 +54,7 @@ public class AuteurPresenter implements Presenter {
 			@Override
 			public void onSuccess(ArrayList<Auteur> result) {
 				listAuteurs = result;
-				List<String> data = new ArrayList<>();
-				
-				for(Auteur a : listAuteurs){
-					data.add(a.getNom());
-				}
-				
+				List<String> data = AuteurPresenter.formatData(listAuteurs);
 				display.setData(data);
 			}
 			
@@ -89,17 +84,28 @@ public class AuteurPresenter implements Presenter {
 			@Override
 			public void onSuccess(ArrayList<Auteur> result) {
 				listAuteurs = result;
-				
-				List<String> data = new ArrayList<>();
-				
-				for(Auteur a : listAuteurs){
-					data.add(a.getNom());
-				}
-				
+				List<String> data = AuteurPresenter.formatData(listAuteurs);
 				display.setData(data);
 			}
 		});
 		
+	}
+	
+	private static List<String> formatData(List<Auteur> list){
+		List<String> data = new ArrayList<>();
+		StringBuilder sb = new StringBuilder();
+		
+		for(Auteur a : list){
+			sb.setLength(0);
+			sb.append(a.getNom());
+			sb.append("; ");
+			sb.append(a.getPrenom());
+			sb.append("; ");
+			sb.append(a.getAdresse());
+			data.add(sb.toString());
+		}
+		
+		return data;
 	}
 
 	private void bind() {
