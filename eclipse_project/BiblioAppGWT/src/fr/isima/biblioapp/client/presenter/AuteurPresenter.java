@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
@@ -11,15 +12,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 
+import fr.isima.biblioapp.client.event.AddAuteurEvent;
 import fr.isima.biblioapp.client.service.BiblioAppServiceAsync;
 import fr.isima.biblioapp.shared.persistence.Auteur;
 
 public class AuteurPresenter implements Presenter {
-	
-	private List<Auteur> listAuteurs;
-	private final BiblioAppServiceAsync rpcService;
-	private final HandlerManager eventBus;
-	private final Display display;
 	
 	public interface Display {
 	    HasClickHandlers getAddButton();
@@ -30,6 +27,11 @@ public class AuteurPresenter implements Presenter {
 	    List<Integer> getSelectedRows();
 	    Widget asWidget();
 	  }
+	
+	private List<Auteur> listAuteurs;
+	private final BiblioAppServiceAsync rpcService;
+	private final HandlerManager eventBus;
+	private final Display display;
 	
 	public AuteurPresenter(BiblioAppServiceAsync rpcService, HandlerManager eventBus, Display view){
 		this.rpcService = rpcService;
@@ -43,7 +45,6 @@ public class AuteurPresenter implements Presenter {
 	    container.clear();
 	    container.add(display.asWidget());
 	    fetchAuteursList();
-		
 	}
 
 
@@ -72,7 +73,13 @@ public class AuteurPresenter implements Presenter {
 	}
 
 	private void bind() {
-		// TODO Auto-generated method stub
+		display.getAddButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				eventBus.fireEvent(new AddAuteurEvent());
+			}
+		});
 		
 	}
 

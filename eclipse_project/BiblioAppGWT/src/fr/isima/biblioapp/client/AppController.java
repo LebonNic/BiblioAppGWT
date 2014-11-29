@@ -6,13 +6,18 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.HasWidgets;
 
+import fr.isima.biblioapp.client.event.AddAuteurEvent;
+import fr.isima.biblioapp.client.event.AddAuteurEventHandler;
 import fr.isima.biblioapp.client.presenter.AuteurPresenter;
+import fr.isima.biblioapp.client.presenter.EditAuteurPresenter;
 import fr.isima.biblioapp.client.presenter.Presenter;
 import fr.isima.biblioapp.client.service.BiblioAppServiceAsync;
 import fr.isima.biblioapp.client.view.AuteurView;
+import fr.isima.biblioapp.client.view.EditAuteurView;
 
 public class AppController implements Presenter, ValueChangeHandler<String>{
 	private static final String listAuteurToken = "listAuteur";
+	private static final String addAuteurToken = "addAuteur";
 	private final HandlerManager eventBus;
 	private final BiblioAppServiceAsync rpcService; 
 	private HasWidgets container;
@@ -25,6 +30,16 @@ public class AppController implements Presenter, ValueChangeHandler<String>{
 
 	private void bind() {
 		History.addValueChangeHandler(this);
+		
+		eventBus.addHandler(
+				AddAuteurEvent.TYPE,
+				
+				new AddAuteurEventHandler() {
+					@Override
+					public void onAddAuteur(AddAuteurEvent event) {
+						doAddNewAuteur();
+					}
+				});
 	}
 
 	@Override
@@ -39,6 +54,10 @@ public class AppController implements Presenter, ValueChangeHandler<String>{
 
 	      if (token.equals(AppController.listAuteurToken)) {
 	        presenter = new AuteurPresenter(rpcService, eventBus, new AuteurView());
+	      }
+	      
+	      if(token.equals(AppController.addAuteurToken)){
+	    	  presenter = new EditAuteurPresenter(rpcService, eventBus, new EditAuteurView());
 	      }
 	      
 	      if (presenter != null) {
@@ -59,7 +78,11 @@ public class AppController implements Presenter, ValueChangeHandler<String>{
 	    else {
 	      History.fireCurrentHistoryState();
 	    }
-		
+	    
+	}
+	
+	private void doAddNewAuteur(){
+		History.newItem(AppController.addAuteurToken);
 	}
 
 }
