@@ -123,7 +123,7 @@ public class AppController implements Presenter, ValueChangeHandler<String>{
 	@Override
 	public void go(HasWidgets container) {
 		this.container = container;
-		System.out.println(History.getToken());
+		//System.out.println(History.getToken());
 		
 	    if ("".equals(History.getToken())) {
 	      History.newItem(AppController.listAuteurToken);

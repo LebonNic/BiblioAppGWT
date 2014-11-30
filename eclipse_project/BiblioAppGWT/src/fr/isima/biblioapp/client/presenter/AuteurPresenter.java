@@ -6,6 +6,9 @@ import java.util.List;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.HasKeyUpHandlers;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -22,10 +25,13 @@ public class AuteurPresenter implements Presenter {
 	public interface Display {
 	    HasClickHandlers getAddButton();
 	    HasClickHandlers getDeleteButton();
+	    HasClickHandlers getSearchButton();
+	    HasKeyUpHandlers getSearchBar();
 	    HasClickHandlers getList();
 	    void setData(List<String> data);
 	    int getClickedRow(ClickEvent event);
 	    List<Integer> getSelectedRows();
+	    String getSearchedValue();
 	    Widget asWidget();
 	  }
 	
@@ -46,6 +52,56 @@ public class AuteurPresenter implements Presenter {
 	    container.clear();
 	    container.add(display.asWidget());
 	    fetchAuteursList();
+	}
+	
+	private void bind() {
+		display.getAddButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				eventBus.fireEvent(new AddAuteurEvent());
+			}
+		});
+		
+		display.getDeleteButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				deleteSelectedAuteurs();
+			}
+		});
+		
+		display.getList().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				int selectedRow = display.getClickedRow(event);
+		        
+		        if (selectedRow >= 0) {
+		        	Long numero_a = listAuteurs.get(selectedRow).getNumero_a();
+		        	eventBus.fireEvent(new UpdateAuteurEvent(numero_a));
+		        }
+				
+			}
+		});
+		
+		display.getSearchButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				searchAuteurs();
+			}
+		});
+		
+		display.getSearchBar().addKeyUpHandler(new KeyUpHandler() {
+			
+			@Override
+			public void onKeyUp(KeyUpEvent event) {
+				searchAuteurs();
+				
+			}
+		});
+		
 	}
 
 	private void fetchAuteursList() {
@@ -78,7 +134,27 @@ public class AuteurPresenter implements Presenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Error deleting selected contacts");
+				Window.alert("Error deleting selected auteurs");
+			}
+
+			@Override
+			public void onSuccess(ArrayList<Auteur> result) {
+				listAuteurs = result;
+				List<String> data = AuteurPresenter.formatData(listAuteurs);
+				display.setData(data);
+			}
+		});
+		
+	}
+	
+	private void searchAuteurs(){
+		String nom = display.getSearchedValue();
+		rpcService.searchAuteurs(nom, new AsyncCallback<ArrayList<Auteur>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert("Error searching auteurs");
+				
 			}
 
 			@Override
@@ -106,39 +182,6 @@ public class AuteurPresenter implements Presenter {
 		}
 		
 		return data;
-	}
-
-	private void bind() {
-		display.getAddButton().addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				eventBus.fireEvent(new AddAuteurEvent());
-			}
-		});
-		
-		display.getDeleteButton().addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				deleteSelectedAuteurs();
-			}
-		});
-		
-		display.getList().addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				int selectedRow = display.getClickedRow(event);
-		        
-		        if (selectedRow >= 0) {
-		        	Long numero_a = listAuteurs.get(selectedRow).getNumero_a();
-		        	eventBus.fireEvent(new UpdateAuteurEvent(numero_a));
-		        }
-				
-			}
-		});
-		
 	}
 
 }

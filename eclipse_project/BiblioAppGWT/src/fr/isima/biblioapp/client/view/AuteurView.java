@@ -5,14 +5,17 @@ import java.util.List;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.HasKeyUpHandlers;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -20,27 +23,41 @@ import fr.isima.biblioapp.client.presenter.AuteurPresenter;
 
 public class AuteurView extends Composite implements AuteurPresenter.Display{
 	
+	private final static int SPACING = 5;
+	private TextBox searchBar;
+	private final Button searchButton;
 	private final Button addButton;
 	private final Button deleteButton;
 	private FlexTable auteursTab;
 	
 	public AuteurView(){
 		 HorizontalPanel hPanel = new HorizontalPanel();
+		 HorizontalPanel searchPanel = new HorizontalPanel();
 		 VerticalPanel vPanel = new VerticalPanel();
+		 
+		 hPanel.setSpacing(AuteurView.SPACING);
+		 searchPanel.setSpacing(AuteurView.SPACING);
+		 vPanel.setSpacing(AuteurView.SPACING);
 		 
 		 //Centrage du layout vertical
 		 vPanel.setWidth("100%");
 		 vPanel.setHeight("100%");
 		 vPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		 vPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		 
+		 vPanel.add(new HTML("<h1>Gestion des auteurs</h1>"));
 		 addButton = new Button("Ajouter");
 		 hPanel.add(addButton);
 		 
 		 deleteButton = new Button("Supprimer");
 		 hPanel.add(deleteButton);
 		 
+		 searchButton = new Button("Rechercher");
+		 searchBar = new TextBox();
+		 searchPanel.add(searchBar);
+		 searchPanel.add(searchButton);
+		 
 		 auteursTab = new FlexTable();
+		 vPanel.add(searchPanel);
 		 vPanel.add(auteursTab);
 		 vPanel.add(hPanel);
 		 
@@ -105,6 +122,21 @@ public class AuteurView extends Composite implements AuteurPresenter.Display{
 	
 	public Widget asWidget(){
 		return this;
+	}
+
+	@Override
+	public HasClickHandlers getSearchButton() {
+		return searchButton;
+	}
+
+	@Override
+	public String getSearchedValue() {
+		return searchBar.getText();
+	}
+
+	@Override
+	public HasKeyUpHandlers getSearchBar() {
+		return searchBar;
 	}
 
 }
