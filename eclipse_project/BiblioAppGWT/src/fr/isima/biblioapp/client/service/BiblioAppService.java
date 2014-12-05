@@ -21,9 +21,11 @@ public interface BiblioAppService extends RemoteService{
 	
 	Livre addLivre(String titre, double prix, String resume, Long numero_a);
 	Livre getLivre(Long numero_l);
+	ArrayList<Livre> getLivresFrom(Long numero_a);
 	ArrayList<Livre> getAllLivres();
 	ArrayList<Livre> searchLivres(String titre);
 	Boolean updateLivre(Long numero_l, String titre, double prix, String resume, Long numero_a);
 	Boolean deleteLivre(Long numero_l);
+	ArrayList<Livre> deleteLivres(List<Long> numeros_l);
 
 }

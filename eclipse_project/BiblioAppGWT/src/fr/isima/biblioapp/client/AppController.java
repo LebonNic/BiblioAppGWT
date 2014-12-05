@@ -8,6 +8,8 @@ import com.google.gwt.user.client.ui.HasWidgets;
 
 import fr.isima.biblioapp.client.event.AddAuteurEvent;
 import fr.isima.biblioapp.client.event.AddAuteurEventHandler;
+import fr.isima.biblioapp.client.event.AddLivreEvent;
+import fr.isima.biblioapp.client.event.AddLivreEventHandler;
 import fr.isima.biblioapp.client.event.AuteurAddedEvent;
 import fr.isima.biblioapp.client.event.AuteurAddedEventHandler;
 import fr.isima.biblioapp.client.event.AuteurUpdatedEvent;
@@ -16,17 +18,23 @@ import fr.isima.biblioapp.client.event.EditAuteurCancelledEvent;
 import fr.isima.biblioapp.client.event.EditAuteurCancelledEventHandler;
 import fr.isima.biblioapp.client.event.UpdateAuteurEvent;
 import fr.isima.biblioapp.client.event.UpdateAuteurEventHandler;
+import fr.isima.biblioapp.client.event.UpdateLivreEvent;
+import fr.isima.biblioapp.client.event.UpdateLivreEventHandler;
 import fr.isima.biblioapp.client.presenter.AuteurPresenter;
 import fr.isima.biblioapp.client.presenter.EditAuteurPresenter;
+import fr.isima.biblioapp.client.presenter.EditLivrePresenter;
 import fr.isima.biblioapp.client.presenter.Presenter;
 import fr.isima.biblioapp.client.service.BiblioAppServiceAsync;
 import fr.isima.biblioapp.client.view.AuteurView;
 import fr.isima.biblioapp.client.view.EditAuteurView;
+import fr.isima.biblioapp.client.view.EditLivreView;
 
 public class AppController implements Presenter, ValueChangeHandler<String>{
 	private static final String listAuteurToken = "listAuteur";
 	private static final String addAuteurToken = "addAuteur";
 	private static final String updateAuteurToken = "updateAuteur";
+	private static final String addLivreToken = "addLivre";
+	private static final String updateLivreToken = "updateLivre";
 	private final HandlerManager eventBus;
 	private final BiblioAppServiceAsync rpcService; 
 	private HasWidgets container;
@@ -93,14 +101,27 @@ public class AppController implements Presenter, ValueChangeHandler<String>{
 						
 					}
 				});
+		
+		eventBus.addHandler(AddLivreEvent.TYPE, new AddLivreEventHandler() {
+			
+			@Override
+			public void onAddLivre(AddLivreEvent event) {
+				doAddLivre(event.getNumero_a());
+			}
+		});
+		
+		eventBus.addHandler(UpdateLivreEvent.TYPE, new UpdateLivreEventHandler() {
+			
+			@Override
+			public void onUpdateLivre(UpdateLivreEvent event) {
+				doUpdateLivre(event.getNumero_l());
+			}
+		});
 	}
 
 	@Override
 	public void onValueChange(ValueChangeEvent<String> event) {
 		String token = event.getValue();
-		
-		//System.out.println("Value of token = " + token);
-		//System.out.println("Value of AppController.listAuteurToken = " + AppController.listAuteurToken);
 		
 	    if (token != null) {
 	      Presenter presenter = null;
@@ -109,7 +130,7 @@ public class AppController implements Presenter, ValueChangeHandler<String>{
 	        presenter = new AuteurPresenter(rpcService, eventBus, new AuteurView());
 	      }
 	      
-	      if(token.equals(AppController.addAuteurToken)){
+	      else if(token.equals(AppController.addAuteurToken)){
 	    	  presenter = new EditAuteurPresenter(rpcService, eventBus, new EditAuteurView());
 	      }
 	      
@@ -123,7 +144,6 @@ public class AppController implements Presenter, ValueChangeHandler<String>{
 	@Override
 	public void go(HasWidgets container) {
 		this.container = container;
-		//System.out.println(History.getToken());
 		
 	    if ("".equals(History.getToken())) {
 	      History.newItem(AppController.listAuteurToken);
@@ -154,6 +174,18 @@ public class AppController implements Presenter, ValueChangeHandler<String>{
 	
 	private void doEditAuteurCancelled(){
 		History.newItem(AppController.listAuteurToken);
+	}
+	
+	private void doAddLivre(Long numero_a){
+		History.newItem(AppController.addLivreToken, false);
+		 Presenter presenter = new EditLivrePresenter(numero_a, rpcService, eventBus, new EditLivreView());
+		 presenter.go(container);
+	}
+	
+	private void doUpdateLivre(Long numero_l){
+		History.newItem(AppController.updateLivreToken, false);
+		Presenter presenter = new EditLivrePresenter(rpcService, eventBus, new EditLivreView(), numero_l);
+		presenter.go(container);
 	}
 
 }

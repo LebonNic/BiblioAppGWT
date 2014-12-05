@@ -19,8 +19,10 @@ public interface BiblioAppServiceAsync {
 	
 	void addLivre(String titre, double prix, String resume, Long numero_a, AsyncCallback<Livre> callback);
 	void getLivre(Long numero_l, AsyncCallback<Livre> callback);
+	void getLivresFrom(Long numero_a, AsyncCallback<ArrayList<Livre>> callback);
 	void getAllLivres(AsyncCallback<ArrayList<Livre>> callback);
 	void searchLivres(String titre, AsyncCallback<ArrayList<Livre>> callback);
 	void updateLivre(Long numero_l, String titre, double prix, String resume, Long numero_a, AsyncCallback<Boolean> callback);
 	void deleteLivre(Long numero_l, AsyncCallback<Boolean> callback);
+	void deleteLivres(List<Long> numeros_l, AsyncCallback<ArrayList<Livre>> callback);
 }

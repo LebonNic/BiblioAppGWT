@@ -57,6 +57,9 @@ public class AuteurView extends Composite implements AuteurPresenter.Display{
 		 searchPanel.add(searchButton);
 		 
 		 auteursTab = new FlexTable();
+		 auteursTab.setWidth("32em");
+		 auteursTab.setCellSpacing(5);
+		 auteursTab.setCellPadding(3);
 		 vPanel.add(searchPanel);
 		 vPanel.add(auteursTab);
 		 vPanel.add(hPanel);
@@ -82,7 +85,7 @@ public class AuteurView extends Composite implements AuteurPresenter.Display{
 	@Override
 	public void setData(List<String> data) {
 		auteursTab.removeAllRows();
-	    
+	    //auteursTab.setWidget(0, 1, new HTML("Header"));
 	    for (int i = 0; i < data.size(); ++i) {
 	    	auteursTab.setWidget(i, 0, new CheckBox());
 	    	auteursTab.setText(i, 1, data.get(i));

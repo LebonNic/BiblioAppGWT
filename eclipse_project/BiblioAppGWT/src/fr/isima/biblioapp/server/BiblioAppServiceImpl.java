@@ -31,6 +31,15 @@ public class BiblioAppServiceImpl extends RemoteServiceServlet implements
 		for(Auteur a : auteurs){
 			ofy().save().entity(a).now();
 		}*/
+		
+		/*List<Livre> livres = new ArrayList<>();
+		livres.add(new Livre("Les Misérables", 25.2, "caca", 5066549580791808L));
+		livres.add(new Livre("L'Homme qui rit", 9.99, "caca", 5066549580791808L));
+		livres.add(new Livre("test", 100, "caca", 5066549580791808L));
+		
+		for(Livre l : livres){
+			ofy().save().entity(l).now();
+		}*/
 	}
 	
 	private static ArrayList<Auteur> toAuteurArrayList(List<Auteur> list){
@@ -152,6 +161,11 @@ public class BiblioAppServiceImpl extends RemoteServiceServlet implements
 		return deleted;
 	}
 	
+	/**
+	 * Supprime une liste d'auteur de la base.
+	 * @param numeros_a Liste des identifiants des auteurs à supprimer.
+	 * @return La nouvelle liste des auteurs après suppression.
+	 */
 	@Override
 	public ArrayList<Auteur> deleteAuteurs(List<Long> numeros_a) {
 		
@@ -189,6 +203,18 @@ public class BiblioAppServiceImpl extends RemoteServiceServlet implements
 		Key<Livre> cleLivre = Key.create(Livre.class, numero_l);
 		Livre livre = ofy().load().key(cleLivre).now();
 		return livre;
+	}
+	
+	/**
+	 * Récupère un liste de livres écrits par l'auteur dont l'identifiant
+	 * est passé en paramètre.
+	 * @param numero_a Le numéro de l'auteur dont on souhaite lister les livres
+	 * @return Une liste de livres écrits par l'auteur demandé.
+	 */
+	@Override
+	public ArrayList<Livre> getLivresFrom(Long numero_a) {
+		List<Livre> livres = ofy().load().type(Livre.class).filter("_numero_a ==", numero_a).list();
+		return BiblioAppServiceImpl.toLivreArrayList(livres);
 	}
 
 	/**
@@ -256,6 +282,20 @@ public class BiblioAppServiceImpl extends RemoteServiceServlet implements
 		}
 		
 		return deleted;
+	}
+
+	/**
+	 * Supprime une liste de livres.
+	 * @param numeros_l La liste des identifiants des livres à supprimer.
+	 * @return La nouvelle liste de livre, une fois la suppression effectuée.
+	 */
+	@Override
+	public ArrayList<Livre> deleteLivres(List<Long> numeros_l) {
+		for(Long numero_l : numeros_l){
+			this.deleteLivre(numero_l); 
+		}
+		
+		return getAllLivres();
 	}
 
 }

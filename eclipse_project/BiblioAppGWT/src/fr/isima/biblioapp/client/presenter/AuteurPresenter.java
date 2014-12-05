@@ -116,7 +116,7 @@ public class AuteurPresenter implements Presenter {
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Error fetching auteurs list");
+				Window.alert("Error fetching authors list");
 			}
 		});
 		
@@ -134,7 +134,7 @@ public class AuteurPresenter implements Presenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Error deleting selected auteurs");
+				Window.alert("Error deleting selected authors");
 			}
 
 			@Override
@@ -153,8 +153,7 @@ public class AuteurPresenter implements Presenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Window.alert("Error searching auteurs");
-				
+				Window.alert("Error searching authors");
 			}
 
 			@Override
