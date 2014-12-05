@@ -10,6 +10,16 @@ h1 {
   text-align: center;
 }
 
+.cw-auteursTabRowsStyle td{
+	border: 1px solid #BBBBBB;
+  	padding: 3px;
+}
+
+.cw-livresTabRowsStyle td{
+	border: 1px solid #BBBBBB;
+  	padding: 3px;
+}		
+
 .sendButton {
   display: block;
   font-size: 16pt;

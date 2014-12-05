@@ -54,12 +54,17 @@ public class EditAuteurView extends Composite implements EditAuteurPresenter.Dis
 		addLivreButton = new Button("Ajouter");
 		deleteLivreButton = new Button("Supprimer");
 		livresTab = new FlexTable();
+		livresTab.setWidth("32em");
+		livresTab.setCellSpacing(0);
+		livresTab.setCellSpacing(5);
+		livresTab.setCellPadding(3);
 		 
 		//Centrage du layout vertical (vPanel)
 		vPanel.setWidth("100%");
 		vPanel.setHeight("100%");
 		vPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		vPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		vPanel.setSpacing(EditAuteurView.SPACING);
 		vPanel.add(new HTML("<h1>Edition d'un auteur</h1>"));
 		
 		// Labélisation des Textbox
@@ -69,6 +74,7 @@ public class EditAuteurView extends Composite implements EditAuteurPresenter.Dis
 		
 		hPanel.add(saveButton);
 		hPanel.add(cancelButton);
+		hPanel.setSpacing(EditAuteurView.SPACING);
 		vPanel.add(hPanel);
 		vPanel.add(new HTML("<h2>Livres écris par l'auteur</h2>"));
 		vPanel.add(livresTab);
@@ -116,9 +122,16 @@ public class EditAuteurView extends Composite implements EditAuteurPresenter.Dis
 	@Override
 	public void setData(List<String> data) {
 		livresTab.removeAllRows();
+		livresTab.setWidget(0, 1, new HTML("<b>Titre</b>"));
+		livresTab.setWidget(0, 2, new HTML("<b>Prix</b>"));
 	    for (int i = 0; i < data.size(); ++i) {
-	    	livresTab.setWidget(i, 0, new CheckBox());
-	    	livresTab.setText(i, 1, data.get(i));
+	    	String [] parts = data.get(i).split(";");
+	    	String titre = parts[0];
+	    	String prix = parts[1];
+	    	livresTab.getRowFormatter().addStyleName(i + 1, "cw-livresTabRowsStyle");
+	    	livresTab.setWidget(i + 1, 0, new CheckBox());
+	    	livresTab.setText(i + 1, 1, titre);
+	    	livresTab.setText(i + 1, 2, prix);
 	    }
 	}
 
@@ -132,7 +145,7 @@ public class EditAuteurView extends Composite implements EditAuteurPresenter.Dis
 	      //  check box
 	      //
 	      if (cell.getCellIndex() > 0) {
-	        selectedRow = cell.getRowIndex();
+	        selectedRow = cell.getRowIndex() - 1;
 	      }
 	    }
 	    
@@ -143,10 +156,10 @@ public class EditAuteurView extends Composite implements EditAuteurPresenter.Dis
 	public List<Integer> getSelectedRows() {
 		List<Integer> selectedRows = new ArrayList<Integer>();
 	    
-	    for (int i = 0; i < livresTab.getRowCount(); ++i) {
+	    for (int i = 1; i < livresTab.getRowCount(); ++i) {
 	      CheckBox checkBox = (CheckBox)livresTab.getWidget(i, 0);
 	      if (checkBox.getValue()) {
-	        selectedRows.add(i);
+	        selectedRows.add(i - 1);
 	      }
 	    }
 	    
