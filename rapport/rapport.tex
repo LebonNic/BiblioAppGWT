@@ -1,0 +1,34 @@
+\documentclass[headinclude, footinclude, fontsize=12pt]{scrreprt} 
+\input{config/Configuration}
+\begin{document}
+\frenchspacing
+\selectlanguage{francais}
+\raggedbottom
+
+% Page de garde
+\include{input/TitlePage}
+% Dos page de garde
+\include{input/Titleback}
+
+\pagenumbering{roman}
+\setcounter{page}{1}
+% Liste des figures
+\listoffigures
+% Table des matières
+\tableofcontents
+
+%----------------------------------------------------------------------------------------
+% Parts & Chapters
+%----------------------------------------------------------------------------------------
+\include{input/Introduction}
+
+\include{input/Serveur}
+
+\include{input/Client}
+
+\include{input/Resultats}
+
+\include{input/Conclusion}
+
+%----------------------------------------------------------------------------------------
+\end{document}

@@ -1,0 +1,186 @@
+%------------------------------------------------
+\PassOptionsToPackage{utf8}{inputenc}
+\usepackage{inputenc}
+%------------------------------------------------
+\newcommand{\titreRapport}{Rapport d'intégration d'application}
+\newcommand{\sousTitreRapport}{Valorisation d'une base de données avec Google App Engine et Google Web Toolkit}
+\newcommand{\filiere}{Filière Génie Logiciel et Systèmes Informatiques}
+\newcommand{\noms}{Antoine \textsc{Colmard} et Nicolas \textsc{Prugne}}
+\newcommand{\ecole}{\small{
+	\textsc{Institut Supérieur d'Informatique \\de Modélisation et de leurs Applications}\\[0.5em]
+	Campus des Cézeaux \\
+	24 Av. des Landais \\
+	BP 10125 \\
+	63173 \textsc{Aubiere} CEDEX}}
+\newcommand{\dateRapport}{Décembre 2014}
+
+%----------------------------------------------------------------------------------------
+% Hyper References
+%----------------------------------------------------------------------------------------
+\usepackage[pdftex, hyperfootnotes=false, pdfpagelabels]{hyperref}
+\pdfcompresslevel=9
+\pdfadjustspacing=1
+
+\hypersetup{
+colorlinks=true, linktocpage=true, pdfstartpage=1, pdfstartview=FitV,
+breaklinks=true, pdfpagemode=UseNone, pageanchor=true, pdfpagemode=UseOutlines,
+plainpages=false, bookmarksnumbered, bookmarksopen=true, bookmarksopenlevel=1,
+hypertexnames=true, pdfhighlight=/O, urlcolor=black, linkcolor=black, citecolor=black,
+%------------------------------------------------
+% PDF file meta-information
+%------------------------------------------------
+pdftitle={\sousTitreRapport},
+pdfauthor={\noms},
+pdfsubject={},
+pdfkeywords={},
+pdfcreator={pdfLaTeX},
+pdfproducer={LaTeX with hyperref and classicthesis}
+%------------------------------------------------
+}
+
+%----------------------------------------------------------------------------------------
+% Packages
+%----------------------------------------------------------------------------------------
+%--- Babel --------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[francais,american]{babel}
+%--- Classic Thesis -----------------------------
+\usepackage[
+	eulerchapternumbers,
+	manychapters,
+	listings,
+	pdfspacing,
+	subfig,
+	beramono,
+	eulermath,
+	parts,
+	dottedtoc
+	]{classicthesis}
+\AtBeginDocument{\renewcommand{\thepart}{\Roman{part}}}
+%--- Maths --------------------------------------
+\usepackage[square, numbers]{natbib}
+\usepackage[fleqn]{amsmath}
+%--- Spacing and geometry -----------------------
+\usepackage{xspace}
+\usepackage{setspace}
+\usepackage[pdftex]{graphicx}
+\usepackage[total={16cm,24.7cm},centering,includefoot]{geometry}
+\linespread{1.50}
+%--- Patches for latex --------------------------
+\usepackage{mparhack}
+\usepackage{fixltx2e}
+%--- Glossaries ---------------------------------
+\usepackage[acronym,style=long,nolist]{glossaries}
+\makeglossaries
+%--- Table of content configuration -------------
+\usepackage[nottoc,notlof,numbib]{tocbibind}
+%------------------------------------------------
+\usepackage{lipsum}
+\usepackage{indentfirst}
+
+\usepackage[official]{eurosym}
+%----------------------------------------------------------------------------------------
+% Commands
+%----------------------------------------------------------------------------------------
+\graphicspath{{img/}}
+\newcommand{\fig}[4][1]{\begin{figure}[!ht]
+	\centering
+	\includegraphics[scale=#1]{#3}
+	\caption{#4}
+	\label{#2}
+\end{figure}}
+
+\newcounter{dummy}
+%----------------------------------------------------------------------------------------
+% Algorithms
+%----------------------------------------------------------------------------------------
+\usepackage[section]{algorithm}
+\usepackage{algpseudocode}
+% Francisation des algorithmes
+\floatname{algorithm}{Algorithme}
+\renewcommand{\algorithmicfunction}{\textbf{fonction}}
+\renewcommand{\algorithmicwhile}   {\textbf{tant que}}
+\renewcommand{\algorithmicdo}      {\textbf{faire}}
+\renewcommand{\algorithmicend}     {\textbf{fin}}
+\renewcommand{\algorithmicif}      {\textbf{si}}
+\renewcommand{\algorithmicelse}    {\textbf{sinon}}
+\renewcommand{\algorithmicthen}    {\textbf{alors}}
+\renewcommand{\algorithmicfor}     {\textbf{pour}}
+\renewcommand{\algorithmicforall}  {\textbf{pour tout}}
+\renewcommand{\algorithmicdo}      {\textbf{faire}}
+\renewcommand{\algorithmicrepeat}  {\textbf{répéter}}
+\renewcommand{\algorithmicuntil}   {\textbf{jusqu'à}}
+\let\mylistof\listof
+\renewcommand\listof[2]{\mylistof{algorithm}{Table des algorithmes}}
+\makeatletter
+\renewcommand{\thealgorithm}{\arabic{algorithm}} 
+\makeatother
+
+%----------------------------------------------------------------------------------------
+%	Tables, figures
+%----------------------------------------------------------------------------------------
+\usepackage{caption}
+\captionsetup{format=hang,font=small}
+\usepackage{subfig}
+\addto\captionsfrench{\renewcommand\listfigurename{Table des figures}}
+\setcounter{table}{-1}
+\addto\captionsfrench{\renewcommand\listtablename{Table des tableaux}}
+\addto\captionsfrench{\renewcommand\tablename{\textsc{Tableau}}}
+%----------------------------------------------------------------------------------------
+% Bibliographie
+%----------------------------------------------------------------------------------------
+\bibliographystyle{alpha}
+\addto\captionsfrench{\renewcommand{\bibname}{Références bibliographiques}}
+%----------------------------------------------------------------------------------------
+% Code listing
+%----------------------------------------------------------------------------------------
+\usepackage{listings} 
+\lstset{language=C++, % Specify the language for listings here
+keywordstyle=\color{RoyalBlue}, % Add \bfseries for bold
+basicstyle=\small\ttfamily, % Makes listings a smaller font size and a different font
+%identifierstyle=\color{NavyBlue}, % Color of text inside brackets
+commentstyle=\color{Green}\ttfamily, % Color of comments
+stringstyle=\rmfamily, % Font type to use for strings
+numbers=left, % Change left to none to remove line numbers
+numberstyle=\scriptsize, % Font size of the line numbers
+stepnumber=5, % Increment of line numbers
+numbersep=8pt, % Distance of line numbers from code listing
+showstringspaces=false, % Sets whether spaces in strings should appear underlined
+breaklines=true, % Force the code to stay in the confines of the listing box
+%frameround=ftff, % Uncomment for rounded frame
+frame=lines, % Frame border - none/leftline/topline/bottomline/lines/single/shadowbox/L
+backgroundcolor=\color{black!5}, % set backgroundcolor
+belowcaptionskip=.75\baselineskip, % Space after the "Listing #: Desciption" text and the listing box
+inputencoding=utf8,
+extendedchars=true,
+literate={à}{{\`a}}1 {â}{{\^a}}1 {é}{{\'e}}1 {è}{{\`e}}1 {ê}{{\^e}}1 {°}{{\degre}}1 {ô}{{\^o}}1 {î}{{\^i}}1 {ç}{{\c c}}1
+}
+
+%----------------------------------------------------------------------------------------
+%	BACKREFERENCES
+%----------------------------------------------------------------------------------------
+\usepackage{ifthen} % Allows the user of the \ifthenelse command
+\newboolean{enable-backrefs} % Variable to enable backrefs in the bibliography
+\setboolean{enable-backrefs}{false} % Variable value: true or false
+
+\newcommand{\backrefnotcitedstring}{\relax} % (Not cited.)
+\newcommand{\backrefcitedsinglestring}[1]{(Cited on page~#1.)}
+\newcommand{\backrefcitedmultistring}[1]{(Cited on pages~#1.)}
+\ifthenelse{\boolean{enable-backrefs}} % If backrefs were enabled
+{
+\PassOptionsToPackage{hyperpageref}{backref}
+\usepackage{backref} % to be loaded after hyperref package 
+\renewcommand{\backreftwosep}{ and~} % separate 2 pages
+\renewcommand{\backreflastsep}{, and~} % separate last of longer list
+\renewcommand*{\backref}[1]{}  % disable standard
+\renewcommand*{\backrefalt}[4]{% detailed backref
+\ifcase #1 
+\backrefnotcitedstring
+\or
+\backrefcitedsinglestring{#2}
+\else
+\backrefcitedmultistring{#2}
+\fi}
+}{\relax}
+
+%\usepackage{lmodern}
