@@ -28,9 +28,6 @@ public class EditLivreView extends Composite implements EditLivrePresenter.Displ
 		title = new TextBox();
 		price = new TextBox();
 		summary = new TextArea();
-		EditLivreView.addLabel("Titre : ", title);
-		EditLivreView.addLabel("Prix : ", price);
-		EditLivreView.addLabel("Résumé", summary);
 		
 		saveButton = new Button("Sauvegarder");
 		cancelButton = new Button("Annuler");
@@ -48,8 +45,10 @@ public class EditLivreView extends Composite implements EditLivrePresenter.Displ
 		layout.setSpacing(EditLivreView.SPACING);
 		layout.add(new HTML("<h1>Edition d'un livre</h1>"));
 		
-		layout.add(title);
-		layout.add(price);
+		layout.add(EditLivreView.addLabel("Titre : ", title));
+		layout.add(EditLivreView.addLabel("Prix : ", price));
+		layout.add(new HTML("Resumé"));
+		summary.setVisibleLines(10);
 		layout.add(summary);
 		layout.add(hPanel);
 		

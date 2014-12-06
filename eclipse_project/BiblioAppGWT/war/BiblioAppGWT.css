@@ -15,6 +15,16 @@ h1 {
   font-size: 16pt;
 }
 
+.cw-auteursTabRowsStyle td{
+	border: 1px solid #BBBBBB;
+  	padding: 3px;
+}
+
+.cw-livresTabRowsStyle td{
+	border: 1px solid #BBBBBB;
+  	padding: 3px;
+}	
+
 /** Most GWT widgets already have a style name defined */
 .gwt-DialogBox {
   width: 400px;

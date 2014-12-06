@@ -85,10 +85,19 @@ public class AuteurView extends Composite implements AuteurPresenter.Display{
 	@Override
 	public void setData(List<String> data) {
 		auteursTab.removeAllRows();
-	    //auteursTab.setWidget(0, 1, new HTML("Header"));
+		auteursTab.setWidget(0, 1, new HTML("<b>Nom</b>"));
+		auteursTab.setWidget(0, 2, new HTML("<b>Prénom</b>"));
+		auteursTab.setWidget(0, 3, new HTML("<b>Adresse</b>"));
 	    for (int i = 0; i < data.size(); ++i) {
-	    	auteursTab.setWidget(i, 0, new CheckBox());
-	    	auteursTab.setText(i, 1, data.get(i));
+	    	String [] parts = data.get(i).split(";");
+	    	String nom = parts[0];
+	    	String prenom = parts[1];
+	    	String adresse = parts[2];
+	    	auteursTab.getRowFormatter().addStyleName(i + 1, "cw-auteursTabRowsStyle");
+	    	auteursTab.setWidget(i + 1, 0, new CheckBox());
+	    	auteursTab.setText(i + 1, 1, nom);
+	    	auteursTab.setText(i + 1, 2, prenom);
+	    	auteursTab.setText(i + 1, 3, adresse);
 	    }
 	}
 
@@ -102,7 +111,7 @@ public class AuteurView extends Composite implements AuteurPresenter.Display{
 	      //  check box
 	      //
 	      if (cell.getCellIndex() > 0) {
-	        selectedRow = cell.getRowIndex();
+	    	  selectedRow = cell.getRowIndex() - 1;
 	      }
 	    }
 	    
@@ -113,10 +122,10 @@ public class AuteurView extends Composite implements AuteurPresenter.Display{
 	public List<Integer> getSelectedRows() {
 		List<Integer> selectedRows = new ArrayList<Integer>();
 	    
-	    for (int i = 0; i < auteursTab.getRowCount(); ++i) {
+		for (int i = 1; i < auteursTab.getRowCount(); ++i) {
 	      CheckBox checkBox = (CheckBox)auteursTab.getWidget(i, 0);
 	      if (checkBox.getValue()) {
-	        selectedRows.add(i);
+	    	  selectedRows.add(i - 1);
 	      }
 	    }
 	    
