@@ -76,7 +76,7 @@ public class EditAuteurView extends Composite implements EditAuteurPresenter.Dis
 		hPanel.add(cancelButton);
 		hPanel.setSpacing(EditAuteurView.SPACING);
 		vPanel.add(hPanel);
-		vPanel.add(new HTML("<h2>Livres écris par l'auteur</h2>"));
+		vPanel.add(new HTML("<h2>Livres écrits par l'auteur</h2>"));
 		vPanel.add(livresTab);
 		HorizontalPanel tmpHPanel = new HorizontalPanel();
 		tmpHPanel.add(addLivreButton);

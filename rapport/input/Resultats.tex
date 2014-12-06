@@ -1,2 +1,20 @@
 \chapter{Résultats et tests}
 L'application a été testée de manière empirique et la partie suivante expose ces résultats.
+
+Tout d'abord voici la vue qui fait office de page d'accueil pour l'application (figure \ref{fig:AuteurView}).
+
+\fig[1.0]{fig:AuteurView}{AuteurView}{Vue des auteurs}
+
+Cette dernière permet de rechercher dans la base de données des auteurs par leurs noms. Il suffit de taper le début du nom d'un auteur pour que la liste en dessous de la barre de texte s'actualise avec les résultats de la recherche.
+
+Pour supprimer des auteurs, il suffit de cliquer sur les cases à cocher présentes sur chaque ligne, puis de cliquer sur le bouton \verb|Supprimer|. Pour modifier un auteur existant, il suffit de cliquer sur la ligne de cet auteur. Enfin pour ajouter un nouvel auteur, l'utilisateur n'a qu'à cliquer sur le bouton \verb|Ajouter|, avant d'être redirigé sur la vue d'édition d'un auteur (figure \ref{fig:EditAuteurView}).
+
+\fig[1.0]{fig:EditAuteurView}{EditAuteurView}{Édition d'un auteur}
+
+Le formulaire permet de renseigner différentes informations sur l'auteur. Il permet également de connaitre quels livres de l'auteur sont disponibles dans la base et il permet de gérer cette liste. Si l'utilisateur souhaite ajouter un livre pour l'auteur qu'il édite, il lui suffit de cliquer sur le bouton \verb|Ajouter|. S'il souhaite modifier les informations d'un livre existant, il lui suffit de cliquer sur la ligne de ce livre. La page d'édition d'un livre s'ouvre alors (figure \ref{fig:EditLivreView}).
+
+\fig[1.0]{fig:EditLivreView}{EditLivreView}{Édition d'un livre}
+
+Cette vue permet d'éditer les informations associées à un livre, et de valider ou d'annuler cette saisie.
+
+L'application dans son ensemble est fonctionnelle bien qu'elle présente un léger défaut. En effet, le mécanisme de stockage utilisé dans le Datastore présente l'inconvénient d'être asynchrone. Ceci a pour conséquence que les données affichées dans les vues ne sont pas toujours l'exact reflet de ce que contient la base de données. Ainsi, lorsque l'on ajoute un auteur, la main est rendue à l'utilisateur, mais la sauvegarde de l'auteur ne s'effectuera que quelques secondes plus tard. Dès lors, au chargement de la liste des auteurs qui suit l'ajout, le dernier auteur ajouté ne sera pas forcément visible. Il faudra recharger plusieurs fois la page avant de le voir apparaitre. Ce problème survient également lorsque l'on supprime une entité du Datastore.
