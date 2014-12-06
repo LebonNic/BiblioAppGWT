@@ -1,4 +1,50 @@
 \chapter{Client GWT}
+La force majeure de GWT réside dans l'implémentation de la partie cliente d'une application. En effet, celle-ci s'effectue en Java, ce qui permet aux développeurs à l'aise avec cet environnement de ne pas être perdus. Néanmoins, même si c'est en Java qu'une application GWT se code, c'est bien du Javascript qui va finalement s'exécuter chez le client. Le framework permet de traduire un code Java en son équivalent JavaScript. Il est possible de voir GWT comme un compilateur qui traduirait le code de haut niveau (Java), d'une application en code bas niveau, ici représentait par le JavaScript.
+
+Dès lors, le client se code entièrement comme une application Java standard, notamment la partie graphique, dont la syntaxe se rapproche grandement de l'API Swing. De ce fait, certaines techniques utilisées pour le développement d'une application Java standard sont transposables pour une application GWT. Parmi ces techniques on retrouve la mise en place de design patterns permettant de séparer l'affichage du traitement des données, comme le modèle MVC, ou encore la mise en œuvre de tests unitaires.
+
+Parmi les architectures possibles pour implémenter la partie cliente, il en est une qui prédomine avec GWT, c'est le modèle MVP (Model-View-Presenter). La partie suivante a pour but de mieux présenter ce modèle, ainsi que sa mise en œuvre dans la réalisation de ce TP.
 
 \section{L'architecture MVP}
-\section{Mise en oeuvre du modèle MVP dans le TP}
+Avant de présenter le modèle, il faut expliquer les motivations qui ont conduit à son utilisation. Tout d'abord, comme le MVC, il permet de fortement découpler l'affichage des données, de leurs logiques de traitement. Ainsi, il facilite le travail en équipe des développeurs, dans le sens où chacun peut se concentrer sur le développement d'une des parties du modèle sans influer sur les autres.
+
+La seconde raison qui joue en la faveur du MVP est la facilité qu'il procure pour la mise en place de tests unitaires, ce qui pour une application web est bien souvent source de problèmes.
+
+L'architecture MVP repose sur quatre composant qui vont être expliqués par la suite. Un modèle, une vue, un présentateur et un contrôleur.
+
+\subsection{Le Modèle}
+Le modèle est représenté par l'ensemble des classes métiers de l'application. Dans le cas de ce TP, il s'agit bien entendu des classes Auteur et Livre.
+
+\subsection{La vue}
+La vue, ou plutôt les vues vont regrouper toutes les classes qui définissent une page web affichable de l'application. Elles sont constituées d'un ensemble de composants graphiques GWT qui permettent de concevoir une UI. Il s'agit des boutons, des barres de textes, ou encore des tableaux affichables dans la fenêtre d'un navigateur web par exemple. Toutes la mise en place de ces composants s'effectue au sein des vues de l'application. Les vues n'ont aucune connaissance du modèle, elles ont pour seul rôle d'afficher des composants graphiques au sein de pages web.
+
+\subsection{Le présentateur}
+Chaque vue est accompagnée d'un autre composant appelé présentateur (presenter). Le présentateur va avoir pour rôle de lier la vue au modèle de l'application. Chacun des présentateurs, associé à une vue, contient la logique applicative qui se cache derrière celle-ci. Cette logique inclut la gestion des événements lorsqu'un utilisateur interagit avec la vue, mais aussi la gestion des RPC qui permettent de synchroniser le contenu de celle-ci avec les données du serveur.
+
+\subsection{Le contrôleur}
+Le dernier composant à présenter est le contrôleur. Il est en quelque sorte le chef d'orchestre de l'application. Son travail consiste à gérer tout ce que ne peut être fait dans le code des présentateurs, à savoir, la gestion de l'historique de navigation entre les différentes vues de l'application et la gestion des transitions entre celles-ci.
+
+Chaque partie du modèle à donc un but bien précis. Cette décomposition permet de limiter le couplage entre les différents composants de l'application ce qui aboutit a un développement plus robuste et plus efficace en équipe.
+
+La section suivante présente l'implémentation réelle de cette architecture pour l'application de gestion de livres du TP.
+
+\section{Mise en oeuvre du modèle MVP}
+Tout d'abord, cet outil de gestion de livres ne requière que trois vues. Une première permettant d'afficher une liste d'auteurs, une seconde permettant l'édition d'un auteur, et enfin une troisième dans le but d'éditer les informations d'un livre. Avec ces trois vues viennent également trois présentateur. La liaison vue / présentateur requière alors de définir une interface commune entre les deux composants. Cette interface est définie et imbriquée dans le code de chaque présentateur (figure \ref{fig:MVP}).
+
+\fig[0.7]{fig:MVP}{MVP}{Architecture MVP}
+
+Ces interfaces imbriquées, appelées \verb|Display|, permettent de définir de manière abstraite ce que chaque présentateur s'attend à trouver, dans la vue qui lui est liée.
+
+Par exemple, le présentateur \verb|AuteurPresenter| s'attend à ce que la vue qu'il contrôle présente un bouton permettant d'ajouter un nouvel auteur. Il le fait donc savoir en exposant dans son interface \verb|Display|, une méthode \verb|getAddButton| dont le type de retour est \verb|HasClickHandlers|. Ce type de retour particulier fait partie d'une collection d'interfaces définies par l'API de GWT. Les composants graphiques qui l'implémentent sont obligés de fournir un moyen pour enregistrer un \verb|clickHandler| à leurs listes de handlers.
+
+Ainsi, la vue \verb|AuteurView|, qui implémente l'interface \verb|Display| du présentateur  \verb|AuteurPresenter|, sait qu'elle doit fournir un accesseur retournant une référence sur un composant graphique qui propose une méthode pour enregistrer un \verb|ClickHandler|. Le présentateur pourra alors enregistrer son propre handler sur ce composant et faire le traitement attendu lorsque l'utilisateur cliquera dessus.
+
+Ce système de contrats passés entre les présentateurs et les vues permet de faciliter l'interchangeabilité de ces dernières. En effet, il alors facile de proposer une vue adaptée au terminal sur lequel navigue l'utilisateur, pour peu que celle-ci implémente l'interface.
+
+Un autre point important du modèle MVP concerne la gestion des évènements qui ne peuvent être traités par les présentateurs. Bien souvent, il s'agit d'un évènement qui implique de changer de vue. Par exemple, lorsque l'utilisateur souhaite ajouter un nouvel auteur, il va cliquer sur le bouton \verb|Ajouter|, et la page d'ajout d'un auteur va être chargée.
+
+Pour ce genre d'évènements, le modèle prévoit un composant utilisé par tous les présentateur : le bus d'évènements. Pour reprendre l'exemple précédant, lorsque le présentateur \verb|AuteurPresenter| détecte un appuie sur le bouton \verb|Ajouter|, il va émettre un évènement sur le bus qui va être transmis au contrôleur de l'application. Ces évènements sont matérialisés par des classes qui héritent de \verb|GwtEvent|. Au préalable, le contrôleur à enregistrer l'ensemble des évènements qu'il est capable de traiter, et lorsqu'il en reçoit, il exécute l'opération adéquate.
+
+Concrètement, ce qui se passe au niveau du contrôleur implique un dernier composant nommé \verb|History|. Celui-ci se comporte comme une pile et va stocker des jetons qui représentent l'historique de navigation de l'utilisateur dans l'application. A chaque fois qu'un nouveau jeton va être ajouté à l'historique, la méthode \verb|onValueChange| du contrôleur va être appelée. C'est au niveau de cette dernière que l'instanciation du nouveau présentateur demandé et de la nouvelle vue à charger vont avoir lieu.  
+
+Ainsi, pour résumer, le contrôleur va en permanence écouter le bus d'évènements. Dès lors qu'un évènement enregistré se produit, le contrôleur va ajouter un nouveau jeton à l'historique pour indiquer et mémoriser un changement de vue. Par la suite, la méthode \verb|onValueChange| va être appelée, et cette dernière va réaliser l'instanciation de la nouvelle vue et du présentateur associé.
